@@ -12,6 +12,7 @@ class Streetview extends Model
         'longtitude',
         'latitude',
 	    'imageLink',
+	    'url',
         'geometry_id',
 
     ];
