@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Streetview;
+use App\GeoRoad;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
@@ -22,6 +23,7 @@ class StreetViewController extends Controller
       $geo_id = $request->geometry_id;
 
       $path = "public/".$geo_id[0];
+      // $path = "public/".$geo_id;
       if(!Storage::exists($path))
       {
         Storage::makeDirectory($path);
@@ -34,7 +36,7 @@ class StreetViewController extends Controller
         // $x = new Streetview;
         // $x->longitude = $request->longitude;
         // $x->latitude = $request->latitude;
-        // $x->imageLink = $this->saveFile($request->imageLink);
+        // $x->imageLink = $this->saveFile($request->imageLink,$geo_id);
         // $x->geometry_id = $request->geometry_id;
         // $x->url = self::$url;
         // $x->save();
@@ -49,6 +51,15 @@ class StreetViewController extends Controller
 
       }
 
+      if(count(GeoRoad::where('geometry_id','=',$geo_id[0])->select('geometry_id')->get())==0)
+      {
+        $road = new GeoRoad;
+        $road->geometry_id = $geo_id[0];
+        // $road->geometry_id = $geo_id;
+        $road->road_name = $request->road_name[0];
+        // $road->road_name = $request->road_name;
+        $road->save();
+      }
       return response()->json(['Message' => 'Inserted']);
 
     }
@@ -75,22 +86,26 @@ class StreetViewController extends Controller
       }
       public function viewFile($id){
 
-        $getData = Streetview::where('id','=',$id)->select('url')->first();
-        // $name = $getData->imageLink;
-        $name = $getData->url;
+        $getData = Streetview::where('id','=',$id)->select('geometry_id','imageLink')->first();
+        $name = $getData->imageLink;
+        $geo_id = $getData->geometry_id;
+        // $name = $getData->url;
 
-        // $path = storage_path('app/public/'.$name);
+        $path = storage_path('app/public/'.$geo_id.'/'.$name);
 
         //return response()->view($path);
-         //return response()->file($path);
-        return response()->file($name);
+         return response()->file($path);
+        // return response()->file($name);
       }
 
       public function viewStreet($geo_id)
       {
-        $getData = Streetview::where('geometry_id','=',$geo_id)->select('id','longitude','latitude','url')->get();
+        $getData = Streetview::where('geometry_id','=',$geo_id)->select('id','longitude','latitude')->get();
+        $getRoad = GeoRoad::where('geometry_id','=',$geo_id)->select('road_name')->first();
+        $road_name = $getRoad->road_name;
 
-        return response()->json(['geometry_id'=>$geo_id,
+        return response()->json(['name'=>$road_name,
+          'geometry_id'=>$geo_id,
           'data'=>$getData]);
       }
       public function viewAll()
@@ -104,12 +119,16 @@ class StreetViewController extends Controller
         {
           foreach ($Data as $Dat) 
           {
-              $geo = $Dat->geometry_id;
+              $geo_id = $Dat->geometry_id;
               unset($Dat->geometry_id);
+              unset($Dat->url);
               
           }
+          $getRoad = GeoRoad::where('geometry_id','=',$geo_id)->select('road_name')->first();
+          $road_name = $getRoad->road_name;
           $files[$i] = array(
-                'geometry_id' => $geo,
+                'name'=>$road_name,
+                'geometry_id' => $geo_id,
                 'data' => $Data
               );
               $i++;
