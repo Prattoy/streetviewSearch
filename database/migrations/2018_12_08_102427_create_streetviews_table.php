@@ -18,7 +18,6 @@ class CreateStreetviewsTable extends Migration
             $table->float('longitude');
             $table->float('latitude');
             $table->string('imageLink');
-            $table->string('url');
             $table->integer('geometry_id');
             $table->timestamps();
         });

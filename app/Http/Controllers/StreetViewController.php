@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Response;
 class StreetViewController extends Controller
 {
     // public static $geo_id;
-    public static $url;
+    // public static $url;
     public function UploadData(Request $request)
     {
       $lon = $request->longitude;
@@ -46,7 +46,7 @@ class StreetViewController extends Controller
         $x->latitude = $lat[$i];
         $x->imageLink = $this->saveFile($imgLink[$i],$geo_id[$i]);
         $x->geometry_id = $geo_id[$i];
-        $x->url = self::$url;
+        // $x->url = self::$url;
         $x->save();
 
       }
@@ -71,7 +71,7 @@ class StreetViewController extends Controller
       {
         $filename = str_replace(' ', '_', $file->getClientOriginalName());
         Storage::put('public/'.$geo_id.'/'.$filename,  File::get($file));
-        self::$url = storage_path('app/public/'.$geo_id.'/'.$filename);
+        // self::$url = storage_path('app/public/'.$geo_id.'/'.$filename);
         return $filename;
       }
       public function deleteFile($name)
@@ -110,7 +110,7 @@ class StreetViewController extends Controller
       }
       public function viewAll()
       {
-        $Datas = Streetview::select('id','longitude','latitude','url','geometry_id')
+        $Datas = Streetview::select('id','longitude','latitude','geometry_id')
         ->get()
         ->groupBy('geometry_id');
 
@@ -121,7 +121,7 @@ class StreetViewController extends Controller
           {
               $geo_id = $Dat->geometry_id;
               unset($Dat->geometry_id);
-              unset($Dat->url);
+              // unset($Dat->url);
               
           }
           $getRoad = GeoRoad::where('geometry_id','=',$geo_id)->select('road_name')->first();
