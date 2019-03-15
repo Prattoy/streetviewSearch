@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 // Route::middleware(['cors'])->group(function () {
     
     Route::post('/streetview','StreetViewController@UploadData');
+    Route::post('/geo/search','StreetViewController@geoSearch');
+    Route::post('/streetview/update','StreetViewController@update');
 
 	Route::get('/streetview/get/files','StreetViewController@getFileList');
 	Route::get('/streetview/get/{file}','StreetViewController@viewFile');
