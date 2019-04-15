@@ -4,15 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Streetview extends Model
+class StreetviewNew extends Model
 {
-    //
-    protected $table='streetviews';
+    protected $table='streetviews_new';
     protected $fillable = [
         'longtitude',
         'latitude',
-	    'imageLink',
-	    'location',
+	    'point_id',
+	    'faceSize',
         'geometry_id',
 
     ];

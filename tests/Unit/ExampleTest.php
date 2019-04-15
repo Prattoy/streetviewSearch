@@ -12,8 +12,22 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
+    // public function setUp()
+    // {
+    //     parent::setUp();
+    // }
     public function testBasicTest()
     {
-        $this->assertTrue(true);
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
     }
+
+    
+
+    // public function tearDown()
+    // {
+    //     parent::tearDown();
+    // }
 }

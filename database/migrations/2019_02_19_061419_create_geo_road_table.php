@@ -15,7 +15,7 @@ class CreateGeoRoadTable extends Migration
     {
         Schema::create('geo_road', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('geometry_id');
+            $table->integer('geometry_id');
             $table->string('road_name');
             $table->timestamps();
         });

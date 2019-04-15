@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStreetviewsTable extends Migration
+class InitialViewParameters extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateStreetviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('streetviews', function (Blueprint $table) {
+        Schema::create('initialViewParameters', function (Blueprint $table) {
             $table->increments('id');
-            $table->float('longitude', 12, 10);
-            $table->float('latitude', 12, 10);
-            $table->point('location');
-            $table->string('imageLink');
-            $table->integer('geometry_id');
+            $table->integer('street_id');
+            $table->float('yaw', 22, 20);
+            $table->float('pitch', 22, 20);
+            $table->float('fov', 22, 20);
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateStreetviewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('streetviews');
+        //
     }
 }
